@@ -21,7 +21,7 @@ set servers {26 27 28 29 30 31 32 33}
 set indexLayout {
     {0 1 2 3 4 5 6 7 8 9 10 11}
     {12 13 14 15}
-    {16 17 18}
+    {34 16 17 18}
     {19}
     {20 21}
     {22 23 24 25}
@@ -67,10 +67,11 @@ set _ [make_connection 12 {0 1 2}]
 set _ [make_connection 13 {3 4 5}]
 set _ [make_connection 14 {6 7 8}]
 set _ [make_connection 15 {9 10 11}]
+set _ [make_connection 34 {12}]
 
-set _ [make_connection 17 {12 13 14}]
+set _ [make_connection 17 {13 14}]
 set _ [make_connection 18 {15}]
-set _ [make_connection 19 {17 18 20 21}]
+set _ [make_connection 19 {34 17 18 20 21}]
 set _ [make_connection 20 {21 22 23}]
 set _ [make_connection 21 {24 25}]
 
