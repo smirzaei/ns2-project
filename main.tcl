@@ -113,10 +113,10 @@ foreach row $indexLayout {
 #puts $udp_origin(2)
 
 array set udp_connections {
-	0 27
-	3 29
-	6 31
-	9 33
+	0 33
+	3 31
+	8 28
+	11 26
 }
 set i 0
 foreach udp_origin [array names udp_connections] {
@@ -136,8 +136,8 @@ foreach udp_origin [array names udp_connections] {
 	set _cbr [new Application/Traffic/CBR]
 	set cbr($i) $_cbr
 	
-	$_cbr set packetSize_ 8
-	$_cbr set interval 5
+	$_cbr set packet_size_ 32
+	$_cbr set interval_ 0.001
 	$_cbr attach-agent $_udp
 
 	$ns connect $_udp $_null
@@ -178,7 +178,7 @@ proc finish {} {
 }
 
 $ns at 0.1 "start_traffic"
-$ns at 0.8 "stop_traffic"
-$ns at 1.0 "finish"
+$ns at 9.0 "stop_traffic"
+$ns at 10.0 "finish"
 
 $ns run
