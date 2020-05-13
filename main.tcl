@@ -1,3 +1,5 @@
+# http://nile.wpi.edu/NS/simple_ns.html
+
 set ns [new Simulator]
 
 set f [open out.tr w]
@@ -118,6 +120,18 @@ array set udp_connections {
 	8 28
 	11 26
 }
+
+array set tcp_connections {
+	1 26
+	2 27
+	4 28
+	5 29
+	7 30
+	8 31
+	10 32
+	11 33
+}
+
 set i 0
 foreach udp_origin [array names udp_connections] {
 	set udp_dest $udp_connections($udp_origin)
@@ -136,8 +150,8 @@ foreach udp_origin [array names udp_connections] {
 	set _cbr [new Application/Traffic/CBR]
 	set cbr($i) $_cbr
 	
-	$_cbr set packet_size_ 32
-	$_cbr set interval_ 0.001
+	$_cbr set packet_size_ 64
+	$_cbr set interval_ 0.05
 	$_cbr attach-agent $_udp
 
 	$ns connect $_udp $_null
@@ -146,22 +160,62 @@ foreach udp_origin [array names udp_connections] {
 }
 set n_cbr_connections $i
 
+set i 0
+foreach tcp_origin [array names tcp_connections] {
+	set tcp_dest $tcp_connections($tcp_origin)
+	
+	puts "Connecting TCP node: $tcp_origin to node: $tcp_dest"
+	
+	set _tcp [new Agent/TCP]
+	$_tcp set fid_ 2
+	set tcp($i) $_tcp
+	$ns attach-agent $n($tcp_origin) $_tcp
+	
+	set _sink [new Agent/TCPSink]
+	set sink($i) $_sink
+	$ns attach-agent $n($tcp_dest) $_sink
+	
+	set _ftp [new Application/FTP]
+	set ftp($i) $_ftp
+	
+#	$_cbr set packet_size_ 32
+#	$_cbr set interval_ 0.001
+	$_ftp attach-agent $_tcp
+	$_ftp set type_ FTP
+
+	$ns connect $_tcp $_sink
+	
+	incr i
+}
+set n_ftp_connections $i
+
 proc start_traffic {} {
-	global n_cbr_connections cbr
+	global n_ftp_connections n_cbr_connections cbr ftp
 	
 	for {set i 0} {$i < $n_cbr_connections} {incr i} {
 		puts "start CBR traffic: $i"
 		$cbr($i) start
 	}
+
+	for {set i 0} {$i < $n_ftp_connections} {incr i} {
+		puts "start FTP traffic: $i"
+		$ftp($i) start
+	}
 }
 
 
+
 proc stop_traffic {} {
-	global n_cbr_connections cbr
+	global n_ftp_connections n_cbr_connections cbr ftp
 	
 	for {set i 0} {$i < $n_cbr_connections} {incr i} {
 		puts "stop CBR traffic: $i"
 		$cbr($i) stop
+	}
+	
+		for {set i 0} {$i < $n_ftp_connections} {incr i} {
+		puts "stop FTP traffic: $i"
+		$ftp($i) stop
 	}
 }
 
