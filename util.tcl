@@ -4,7 +4,7 @@ proc gen_rand {min max} {
 }
 
 proc gen_rand_interval {} {
-	set rnd [rand_int 1 10]
-	return [expr $rnd * 0.02]
+	set rnd [gen_rand 1 10]
+	return [expr $rnd * 0.1]
 }
 

@@ -17,7 +17,8 @@ set i 0
 foreach udp_origin [array names udp_connections] {
 	set udp_dest $udp_connections($udp_origin)
 	
-	puts "Connecting UDP node: $udp_origin to node: $udp_dest"
+	set interval [gen_rand_interval]
+	puts "Connecting UDP node: $udp_origin to node: $udp_dest interval: $interval"
 	
 	set _udp [new Agent/UDP]
 	$_udp set fid_ 1
@@ -85,8 +86,46 @@ foreach tcp_origin [array names tcp_connections] {
 }
 set n_ftp_connections $i
 
+array set delayed_tcp_connections {
+	20 30
+	20 31
+	20 32
+	20 33
+	21 26
+	21 27
+	21 28
+	21 29
+}
+set i 0
+foreach tcp_origin [array names delayed_tcp_connections] {
+	set tcp_dest $delayed_tcp_connections($tcp_origin)
+	
+	puts "Connecting TCP (delayed) node: $tcp_origin to node: $tcp_dest"
+	
+	set _tcp [new Agent/TCP]
+	$_tcp set fid_ 2
+	set tcp_delayed($i) $_tcp
+	$ns attach-agent $n($tcp_origin) $_tcp
+	
+	set _sink [new Agent/TCPSink]
+	set sink_delayed($i) $_sink
+	$ns attach-agent $n($tcp_dest) $_sink
+	
+	set _ftp [new Application/FTP]
+	set ftp_delayed($i) $_ftp
+
+	$_ftp attach-agent $_tcp
+	$_ftp set type_ FTP
+
+	$ns connect $_tcp $_sink
+	
+	incr i
+}
+set n_ftp_delayed_connections $i
+
+
 proc start_traffic {} {
-	global n_ftp_connections n_cbr_connections cbr ftp
+	global n_ftp_connections n_cbr_connections cbr ftp 
 	
 	for {set i 0} {$i < $n_cbr_connections} {incr i} {
 		puts "start CBR traffic: $i"
@@ -99,17 +138,31 @@ proc start_traffic {} {
 	}
 }
 
+proc start_delayed_traffic {} {
+	global ftp_delayed n_ftp_delayed_connections 
+
+	for {set i 0} {$i < $n_ftp_delayed_connections} {incr i} {
+		puts "start FTP (delayed) traffic: $i"
+		$ftp_delayed($i) start
+	}
+}
+
 proc stop_traffic {} {
-	global n_ftp_connections n_cbr_connections cbr ftp
+	global n_ftp_connections n_cbr_connections n_ftp_delayed_connections cbr ftp ftp_delayed
 	
 	for {set i 0} {$i < $n_cbr_connections} {incr i} {
 		puts "stop CBR traffic: $i"
 		$cbr($i) stop
 	}
 	
-		for {set i 0} {$i < $n_ftp_connections} {incr i} {
+	for {set i 0} {$i < $n_ftp_connections} {incr i} {
 		puts "stop FTP traffic: $i"
 		$ftp($i) stop
+	}
+	
+	for {set i 0} {$i < $n_ftp_delayed_connections} {incr i} {
+		puts "stop FTP (delayed) traffic: $i"
+		$ftp_delayed($i) stop
 	}
 }
 
