@@ -13,6 +13,7 @@ $ns color 2 Blue
 $ns color 3 Yellow
 $ns color 4 Purple
 
+source "util.tcl"
 source "layout.tcl"
 source "connection.tcl"
 source "traffic.tcl"

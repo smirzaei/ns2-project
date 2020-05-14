@@ -99,8 +99,6 @@ proc start_traffic {} {
 	}
 }
 
-
-
 proc stop_traffic {} {
 	global n_ftp_connections n_cbr_connections cbr ftp
 	
