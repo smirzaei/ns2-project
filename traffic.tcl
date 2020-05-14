@@ -123,6 +123,44 @@ foreach tcp_origin [array names delayed_tcp_connections] {
 }
 set n_ftp_delayed_connections $i
 
+array set delayed_udp_connections {
+	20 30
+	20 31
+	20 32
+	20 33
+	21 26
+	21 27
+	21 28
+	21 29
+}
+set i 0
+foreach udp_origin [array names delayed_udp_connections] {
+	set udp_dest $delayed_udp_connections($udp_origin)
+	
+	set interval [gen_rand_interval]
+	puts "Connecting UDP (delayed) node: $udp_origin to node: $udp_dest interval: $interval"
+	
+	set _udp [new Agent/UDP]
+	$_udp set fid_ 1
+	set udp_delayed($i) $_udp
+	$ns attach-agent $n($udp_origin) $_udp
+	
+	set _null [new Agent/Null]
+	set null_delayed($i) $_null
+	$ns attach-agent $n($udp_dest) $_null
+	
+	set _cbr [new Application/Traffic/CBR]
+	set cbr_delayed($i) $_cbr
+	
+	$_cbr set packet_size_ 2048
+	$_cbr set interval_ 0.2
+	$_cbr attach-agent $_udp
+
+	$ns connect $_udp $_null
+	
+	incr i
+}
+set n_delayed_cbr_connections $i
 
 proc start_traffic {} {
 	global n_ftp_connections n_cbr_connections cbr ftp 
@@ -139,7 +177,12 @@ proc start_traffic {} {
 }
 
 proc start_delayed_traffic {} {
-	global ftp_delayed n_ftp_delayed_connections 
+	global ftp_delayed cbr_delayed n_ftp_delayed_connections n_delayed_cbr_connections
+
+	for {set i 0} {$i < $n_delayed_cbr_connections} {incr i} {
+		puts "start CBR (delayed) traffic: $i"
+		$cbr_delayed($i) start
+	}
 
 	for {set i 0} {$i < $n_ftp_delayed_connections} {incr i} {
 		puts "start FTP (delayed) traffic: $i"
@@ -148,7 +191,7 @@ proc start_delayed_traffic {} {
 }
 
 proc stop_traffic {} {
-	global n_ftp_connections n_cbr_connections n_ftp_delayed_connections cbr ftp ftp_delayed
+	global n_ftp_connections n_cbr_connections n_ftp_delayed_connections cbr ftp ftp_delayed cbr_delayed n_delayed_cbr_connections
 	
 	for {set i 0} {$i < $n_cbr_connections} {incr i} {
 		puts "stop CBR traffic: $i"
@@ -163,6 +206,11 @@ proc stop_traffic {} {
 	for {set i 0} {$i < $n_ftp_delayed_connections} {incr i} {
 		puts "stop FTP (delayed) traffic: $i"
 		$ftp_delayed($i) stop
+	}
+	
+	for {set i 0} {$i < $n_delayed_cbr_connections} {incr i} {
+		puts "stop CBR (delayed) traffic: $i"
+		$cbr_delayed($i) stop
 	}
 }
 
