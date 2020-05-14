@@ -63,25 +63,25 @@ foreach pn $purple_nodes {
 	$n($pn) color purple
 }
 
-set _ [make_connection 12 {0 1 2} 1Mb 10ms]
-set _ [make_connection 13 {3 4 5} 1Mb 10ms]
-set _ [make_connection 14 {6 7 8} 1Mb 10ms]
-set _ [make_connection 15 {9 10 11} 1Mb 10ms]
+set _ [make_connection 12 {0 1 2} 10Mb 10ms]
+set _ [make_connection 13 {3 4 5} 10Mb 10ms]
+set _ [make_connection 14 {6 7 8} 10Mb 10ms]
+set _ [make_connection 15 {9 10 11} 10Mb 10ms]
 
-set _ [make_connection 34 {12} 1Mb 10ms]
-set _ [make_connection 17 {13 14} 1Mb 10ms]
-set _ [make_connection 18 {15} 1Mb 10ms]
+set _ [make_connection 34 {12} 10Mb 10ms]
+set _ [make_connection 17 {13 14} 10Mb 10ms]
+set _ [make_connection 18 {15} 10Mb 10ms]
 
-set _ [make_connection 19 {34 17 18 20 21} 1Mb 10ms]
-set _ [make_connection 19 {34 17 18} 1Mb 10ms]
+set _ [make_connection 19 {34 17 18} 10Mb 10ms]
+set _ [make_connection 19 {20 21} 10Mb 10ms]
 
-set _ [make_connection 20 {21 22 23} 1Mb 10ms]
-set _ [make_connection 21 {24 25} 1Mb 10ms]
+set _ [make_connection 20 {21 22 23} 10Mb 10ms]
+set _ [make_connection 21 {24 25} 10Mb 10ms]
 
-set _ [make_connection 22 {26 27} 1Mb 10ms]
-set _ [make_connection 23 {28 29} 1Mb 10ms]
-set _ [make_connection 24 {30 31} 1Mb 10ms]
-set _ [make_connection 25 {32 33} 1Mb 10ms]
+set _ [make_connection 22 {26 27} 10Mb 10ms]
+set _ [make_connection 23 {28 29} 10Mb 10ms]
+set _ [make_connection 24 {30 31} 10Mb 10ms]
+set _ [make_connection 25 {32 33} 10Mb 10ms]
 
 # Bottom switches to mid router
 
@@ -134,6 +134,10 @@ array set tcp_connections {
 	8 31
 	10 32
 	11 33
+	21 26
+	21 27
+	21 28
+	21 29
 }
 
 set i 0
