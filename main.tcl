@@ -36,10 +36,10 @@ foreach row $indexLayout {
 	}
 }
 
-proc make_connection {main_node other_nodes} {
+proc make_connection {main_node other_nodes bw delay} {
 	global ns n
 	foreach h $other_nodes {
-		$ns duplex-link $n($h) $n($main_node) 1Mb 10ms DropTail
+		$ns duplex-link $n($h) $n($main_node) $bw $delay DropTail
 	}
 }
 
@@ -63,22 +63,25 @@ foreach pn $purple_nodes {
 	$n($pn) color purple
 }
 
-set _ [make_connection 12 {0 1 2}]
-set _ [make_connection 13 {3 4 5}]
-set _ [make_connection 14 {6 7 8}]
-set _ [make_connection 15 {9 10 11}]
-set _ [make_connection 34 {12}]
+set _ [make_connection 12 {0 1 2} 1Mb 10ms]
+set _ [make_connection 13 {3 4 5} 1Mb 10ms]
+set _ [make_connection 14 {6 7 8} 1Mb 10ms]
+set _ [make_connection 15 {9 10 11} 1Mb 10ms]
 
-set _ [make_connection 17 {13 14}]
-set _ [make_connection 18 {15}]
-set _ [make_connection 19 {34 17 18 20 21}]
-set _ [make_connection 20 {21 22 23}]
-set _ [make_connection 21 {24 25}]
+set _ [make_connection 34 {12} 1Mb 10ms]
+set _ [make_connection 17 {13 14} 1Mb 10ms]
+set _ [make_connection 18 {15} 1Mb 10ms]
 
-set _ [make_connection 22 {26 27}]
-set _ [make_connection 23 {28 29}]
-set _ [make_connection 24 {30 31}]
-set _ [make_connection 25 {32 33}]
+set _ [make_connection 19 {34 17 18 20 21} 1Mb 10ms]
+set _ [make_connection 19 {34 17 18} 1Mb 10ms]
+
+set _ [make_connection 20 {21 22 23} 1Mb 10ms]
+set _ [make_connection 21 {24 25} 1Mb 10ms]
+
+set _ [make_connection 22 {26 27} 1Mb 10ms]
+set _ [make_connection 23 {28 29} 1Mb 10ms]
+set _ [make_connection 24 {30 31} 1Mb 10ms]
+set _ [make_connection 25 {32 33} 1Mb 10ms]
 
 # Bottom switches to mid router
 
@@ -179,8 +182,8 @@ foreach tcp_origin [array names tcp_connections] {
 	set _ftp [new Application/FTP]
 	set ftp($i) $_ftp
 	
-#	$_cbr set packet_size_ 32
-#	$_cbr set interval_ 0.001
+#	$_ftp set packet_size_ 256
+#	$_ftp set interval_ 0.01
 	$_ftp attach-agent $_tcp
 	$_ftp set type_ FTP
 
