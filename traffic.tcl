@@ -1,8 +1,16 @@
 array set udp_connections {
 	0 33
-	3 31
-	8 28
-	11 26
+	1 32
+	2 31
+	3 30
+	4 29
+	5 28
+	6 27
+	7 26
+	8 26
+	9 27
+	10 28
+	11 31
 }
 
 set i 0
@@ -23,8 +31,8 @@ foreach udp_origin [array names udp_connections] {
 	set _cbr [new Application/Traffic/CBR]
 	set cbr($i) $_cbr
 	
-	$_cbr set packet_size_ 64
-	$_cbr set interval_ 0.05
+	$_cbr set packet_size_ 2048
+	$_cbr set interval_ 0.2
 	$_cbr attach-agent $_udp
 
 	$ns connect $_udp $_null
@@ -34,18 +42,18 @@ foreach udp_origin [array names udp_connections] {
 set n_cbr_connections $i
 
 array set tcp_connections {
+	0 33
 	1 26
 	2 27
+	3 31
 	4 28
 	5 29
+	6 28
 	7 30
 	8 31
+	9 26
 	10 32
 	11 33
-	21 26
-	21 27
-	21 28
-	21 29
 }
 
 set i 0
