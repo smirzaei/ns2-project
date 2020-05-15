@@ -152,8 +152,8 @@ foreach udp_origin [array names delayed_udp_connections] {
 	set _cbr [new Application/Traffic/CBR]
 	set cbr_delayed($i) $_cbr
 	
-	$_cbr set packet_size_ 2048
-	$_cbr set interval_ 0.2
+	$_cbr set packet_size_ 4096
+	$_cbr set interval_ 0.1
 	$_cbr attach-agent $_udp
 
 	$ns connect $_udp $_null

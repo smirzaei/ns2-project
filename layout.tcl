@@ -54,6 +54,7 @@ foreach row $indexLayout {
     set colsize [expr {$width / $nCols}]
     set rowX [expr {$originX + $colsize / 2}]
     foreach index $row {
+    	puts "index: $index x: $rowX y: $rowY"
         $n($index) set X_ $rowX
         $n($index) set Y_ $rowY
         set rowX [expr {$rowX + $colsize}]
