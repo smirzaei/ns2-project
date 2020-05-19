@@ -31,7 +31,7 @@ proc finish {} {
 }
 
 $ns at 0.1 "start_traffic"
-$ns at 0.8 "start_delayed_traffic"
+$ns at 0.55 "start_delayed_traffic"
 $ns at 9.0 "stop_traffic"
 $ns at 10.0 "finish"
 
