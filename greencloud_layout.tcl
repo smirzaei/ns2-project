@@ -39,8 +39,6 @@ foreach pn $purple_nodes {
 	$n($pn) color purple
 }
 
-$n(16) color gray
-
 # Describe the space we're going to lay them out over; you might need to tune this
 set originX 0
 set originY 0
@@ -65,7 +63,7 @@ foreach row $indexLayout {
 }
 
 # Fix node 34
-
+$n(16) color "#e5e5e5"
 $n(34) set X_ 50
 $n(16) set X_ 50
 $n(17) set X_ 150
