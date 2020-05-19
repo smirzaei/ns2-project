@@ -45,6 +45,22 @@ set originY 0
 set width   300
 set height  400
 
+# Shit downwards
+set shift_downwards {
+	16 25
+	34 25
+	18 25
+	12 25
+	15 25
+	0 25
+	1 25
+	2 25
+	9 25
+	10 25
+	11 25
+	
+}
+
 # Do the layout
 set nRows [llength $indexLayout]
 set rowsize [expr {$height / $nRows}]
@@ -57,6 +73,15 @@ foreach row $indexLayout {
     	puts "index: $index x: $rowX y: $rowY"
         $n($index) set X_ $rowX
         $n($index) set Y_ $rowY
+        
+        if {[dict exists $shift_downwards $index]} {
+			set y_amount [dict get $shift_downwards $index]
+			set new_y [expr $rowY - $y_amount]
+			puts "Shift node: $index by $y_amount downwards"
+			
+			$n($index) set Y_ $new_y
+		}
+        
         set rowX [expr {$rowX + $colsize}]
     }
     set rowY [expr {$rowY + $rowsize}]
@@ -68,5 +93,4 @@ $n(34) set X_ 50
 $n(16) set X_ 50
 $n(17) set X_ 150
 $n(18) set X_ 250
-
 
