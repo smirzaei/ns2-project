@@ -14,7 +14,7 @@ $ns color 3 Yellow
 $ns color 4 Purple
 
 source "util.tcl"
-source "layout.tcl"
+source "greencloud_layout.tcl"
 source "connection.tcl"
 source "traffic.tcl"
 
